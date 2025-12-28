@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "loginId": "admin",
+    "password": "123",
+    "role": "admin",
+    "firstname": "Admin",
+    "lastname": "System",
+    "branchId": null,
+    "position": "System Administrator",
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "loginId": "student",
+    "password": "123",
+    "role": "student",
+    "firstname": "ด.ช.เรียนดี",
+    "lastname": "มีความสุข",
+    "studentType": "project",
+    "studentHistoryId": "HIS_001",
+    "branchId": "BRANCH_01",
+    "createdAt": "2024-01-02T00:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "loginId": "manager",
+    "password": "123",
+    "role": "branch_manager",
+    "firstname": "สมชาย",
+    "lastname": "จัดการเก่ง",
+    "branchId": "BRANCH_01",
+    "position": "Manager",
+    "createdAt": "2024-01-03T00:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "loginId": "staff",
+    "password": "123",
+    "role": "staff",
+    "firstname": "สมหญิง",
+    "lastname": "ใจบริการ",
+    "branchId": "BRANCH_01",
+    "position": "Field Officer",
+    "createdAt": "2024-01-04T00:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "loginId": "director",
+    "password": "123",
+    "role": "director",
+    "firstname": "ท่านประธาน",
+    "lastname": "วิสัยทัศน์ไกล",
+    "branchId": null,
+    "position": "Executive Director",
+    "createdAt": "2024-01-05T00:00:00.000Z"
+  }
+]
