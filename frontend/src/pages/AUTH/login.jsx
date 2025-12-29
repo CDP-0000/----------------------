@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
 import LOGIN from "../../components/LOGIN/FormLogin.jsx";
+import { useNavigate } from "react-router-dom";
 
-export default function login_page() {
+export default function login() {
+  const navigate = useNavigate();
+
   return (
     <div class="h-dvh">
       <div class="flex flex-row ">
@@ -14,6 +17,9 @@ export default function login_page() {
         </div>
         <div class="flex-grow-0 mt-20 xl:mr-40 xl:mt-25 lg:mr-40 lg:mt-25 md:mr-40 md:mt-25 sm:mr-15 sm:mt-25">
           <LOGIN />
+        </div>
+        <div>
+          <button className=" border w-20 h-10 rounded-2xl absolute -mx-20 text-white"  onClick={() => navigate("/TESTER_PAGE_")} type="button"></button>
         </div>
       </div>
     </div>

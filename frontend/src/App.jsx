@@ -1,12 +1,14 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 // Import Pages
-import LOGIN from './pages/LOGIN/login_page'
+import LOGIN from './pages/AUTH/login'
 import HOME from './pages/HOME/home_page'
-import REGISTER from './pages/RESGISTER/register_students_page'
+import REGISTER from './pages/AUTH/register'
+import TEST from './pages/TESTS/test'
 
 // Import Guard
 import ProtectedRoute from './components/OTHERS/ProtectedRoute'
+import AdminLayout from './components/layouts/AdminLayout'
 
 function App() {
   return (
@@ -26,7 +28,7 @@ function App() {
       <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
          <Route path="/home" element={<HOME />} />
       </Route>
-
+  
       {/* (Optional) ถ้าหน้า Home นี้เข้าได้ทั้ง Admin และ User */}
       {/* <Route element={<ProtectedRoute allowedRoles={['admin', 'user']} />}>
          <Route path="/home" element={<HOME />} />
@@ -34,7 +36,14 @@ function App() {
 
       {/* ดักทาง: ถ้าพิมพ์ URL มั่วๆ ให้ดีดกลับไป Login */}
       <Route path="*" element={<Navigate to="/login" />} />
+      
+      {/* ตัวอย่างการใช้ Layout ร่วมกับ ProtectedRoute */}
+      <Route element={<AdminLayout />}>
+        <Route path="/TESTER_PAGE_" element={<TEST />} />
+      </Route>
     </Routes>
+
+  
   )
 }
 
