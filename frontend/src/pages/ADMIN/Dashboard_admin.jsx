@@ -128,10 +128,10 @@ export default function AdminDashboard() {
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                    { name: 'โรงเรียน', path: '/admin/master/schools' ,img:'🏫' },
-                    { name: 'หมู่บ้าน', path: '/admin/master/villages' ,img:'🏘️' },
-                    { name: 'สาขา', path: '/admin/master/branches', img:'🏢' },
-                    { name: 'วิชาเรียน', path: '/admin/master/subjects', img:'📚' },
+                    { name: 'โรงเรียน', path: '/admin/schools' ,img:'🏫' },
+                    { name: 'หมู่บ้าน', path: '/admin/villages' ,img:'🏘️' },
+                    { name: 'สาขา', path: '/admin/branches', img:'🏢' },
+                    { name: 'วิชาเรียน', path: '/admin/subjects', img:'📚' },
                     ].map((item, idx) => (
                     <Link 
                         key={idx} 
