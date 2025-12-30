@@ -5,10 +5,12 @@ import LOGIN from './pages/AUTH/login'
 import HOME from './pages/HOME/home_page'
 import REGISTER from './pages/AUTH/register'
 import TEST from './pages/TESTS/test'
+import Dashboard_admin from './pages/ADMIN/Dashboard_admin'
 
 // Import Guard
 import ProtectedRoute from './components/OTHERS/ProtectedRoute'
 import AdminLayout from './components/layouts/AdminLayout'
+import MainLayout from './components/layouts/MainLayout'
 
 function App() {
   return (
@@ -26,9 +28,10 @@ function App() {
       
       {/* ตัวอย่าง: ถ้าหน้า Home นี้สำหรับ Admin เท่านั้น */}
       <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-         <Route path="/home" element={<HOME />} />
+     <Route element={<MainLayout />}>
+         <Route path="/home" element={<Dashboard_admin />} />
       </Route>
-  
+  </Route>
       {/* (Optional) ถ้าหน้า Home นี้เข้าได้ทั้ง Admin และ User */}
       {/* <Route element={<ProtectedRoute allowedRoles={['admin', 'user']} />}>
          <Route path="/home" element={<HOME />} />
@@ -38,7 +41,7 @@ function App() {
       <Route path="*" element={<Navigate to="/login" />} />
       
       {/* ตัวอย่างการใช้ Layout ร่วมกับ ProtectedRoute */}
-      <Route element={<AdminLayout />}>
+      <Route element={<MainLayout />}>
         <Route path="/TESTER_PAGE_" element={<TEST />} />
       </Route>
     </Routes>

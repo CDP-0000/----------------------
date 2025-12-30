@@ -1,4 +1,5 @@
 import React from 'react'
+import TestComponent from '../../components/OTHERS/test.jsx'
 
 export default function test() {
   return (
@@ -16,6 +17,7 @@ export default function test() {
                             <fieldset><s>fsad
                                 fas
                                 <fieldset>sadf</fieldset></s></fieldset></fieldset></fieldset></fieldset></s></fieldset></fieldset></samp>
+                                <TestComponent>OMG</TestComponent>
     </div>
   )
 }
