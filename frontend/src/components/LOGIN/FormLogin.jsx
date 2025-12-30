@@ -40,7 +40,7 @@ export default function FormLogin() {
                 navigate("/home") // ไปหน้า Admin Dashboard
                 break
             case 'student':
-                navigate("/home") // ไปหน้า Home ของนักเรียน (หรือ /student)
+                navigate("/student") // ไปหน้า Home ของนักเรียน (หรือ /student)
                 break
             case 'staff':
                 navigate("/staff") // (ถ้ามีหน้านี้)

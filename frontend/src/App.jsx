@@ -1,52 +1,73 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-// Import Pages
+// Import Pages (Auth)
 import LOGIN from './pages/AUTH/login'
-import HOME from './pages/HOME/home_page'
 import REGISTER from './pages/AUTH/register'
 import TEST from './pages/TESTS/test'
-import Dashboard_admin from './pages/ADMIN/Dashboard_admin'
 
-// Import Guard
+// Import Pages (Dashboards) - **ต้องสร้างไฟล์เหล่านี้ก่อนนะครับ**
+import AdminDashboard from './pages/ADMIN/Dashboard_admin'
+import StudentDashboard from './pages/STUDENT/Dashboard_student'
+import StaffDashboard from './pages/STAFF/Dashboard_staff'
+import ManagerDashboard from './pages/MENEGER/Dashboard_meneger'
+import DirectorDashboard from './pages/DIRECTOR/Dashboard_director'
+
+
+// Import Guard & Layout
 import ProtectedRoute from './components/OTHERS/ProtectedRoute'
-import AdminLayout from './components/layouts/AdminLayout'
 import MainLayout from './components/layouts/MainLayout'
 
 function App() {
   return (
     <Routes>
-      {/* --- 1. Public Zone (เข้าได้ทุกคน) --- */}
-      {/* หน้าแรกให้เป็น Login */}
-      <Route path="/" element={<Navigate to="/login" replace />} /> 
+      {/* =========================================
+          1. Public Zone (ไม่ต้อง Login)
+      ========================================= */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LOGIN />} />
-      
-      {/* หน้าลงทะเบียน (ปกติเด็กๆ ต้องเข้าได้โดยไม่ต้อง Login) */}
       <Route path="/register" element={<REGISTER />} />
 
-
-      {/* --- 2. Private Zone (ต้อง Login เท่านั้น) --- */}
+      {/* =========================================
+          2. Private Zone (ต้อง Login + เช็ค Role)
+      ========================================= */}
       
-      {/* ตัวอย่าง: ถ้าหน้า Home นี้สำหรับ Admin เท่านั้น */}
-      <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-     <Route element={<MainLayout />}>
-         <Route path="/home" element={<Dashboard_admin />} />
+      {/* ใช้ MainLayout ครอบทั้งหมดเพื่อให้มี Sidebar/Header */}
+      <Route element={<MainLayout />}>
+
+        {/* --- A. Admin Only --- */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          <Route path="/home" element={<AdminDashboard />} />
+          {/* เพิ่ม Route อื่นๆ ของ Admin ต่อที่นี่ได้ เช่น /admin/users */}
+        </Route>
+
+        {/* --- B. Student Only --- */}
+        <Route element={<ProtectedRoute allowedRoles={['student']} />}>
+          <Route path="/student" element={<StudentDashboard />} />
+        </Route>
+
+        {/* --- C. Staff Only --- */}
+        <Route element={<ProtectedRoute allowedRoles={['staff']} />}>
+          <Route path="/staff" element={<StaffDashboard />} />
+        </Route>
+
+        {/* --- D. Manager Only --- */}
+        <Route element={<ProtectedRoute allowedRoles={['branch_manager']} />}>
+          <Route path="/manager" element={<ManagerDashboard />} />
+        </Route>
+
+        {/* --- E. Director Only --- */}
+        <Route element={<ProtectedRoute allowedRoles={['director']} />}>
+           <Route path="/director" element={<DirectorDashboard />} />
+        </Route>
+
+        {/* --- F. Shared / Others --- */}
+        <Route path="/TESTER_PAGE_" element={<TEST />} />
+
       </Route>
-  </Route>
-      {/* (Optional) ถ้าหน้า Home นี้เข้าได้ทั้ง Admin และ User */}
-      {/* <Route element={<ProtectedRoute allowedRoles={['admin', 'user']} />}>
-         <Route path="/home" element={<HOME />} />
-      </Route> */}
 
       {/* ดักทาง: ถ้าพิมพ์ URL มั่วๆ ให้ดีดกลับไป Login */}
       <Route path="*" element={<Navigate to="/login" />} />
-      
-      {/* ตัวอย่างการใช้ Layout ร่วมกับ ProtectedRoute */}
-      <Route element={<MainLayout />}>
-        <Route path="/TESTER_PAGE_" element={<TEST />} />
-      </Route>
     </Routes>
-
-  
   )
 }
 
