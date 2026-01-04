@@ -16,6 +16,8 @@ import AdminSchools from './pages/ADMIN/master/AdminSchool'
 import AdminBranches from './pages/ADMIN/master/AdminBranches';
 import AdminVillages from './pages/ADMIN/master/AdminVillages';
 
+import AdminUsersPage from './pages/ADMIN/AdminUsersPage.jsx';
+
 // Import Guard & Layout
 import ProtectedRoute from './components/OTHERS/ProtectedRoute'
 import MainLayout from './components/layouts/MainLayout'
@@ -44,6 +46,7 @@ function App() {
           <Route path="/admin/schools" element={<AdminSchools />} />
           <Route path="/admin/branches" element={<AdminBranches />} />
           <Route path="/admin/villages" element={<AdminVillages />} />
+          <Route path="/admin/users" element={<AdminUsersPage />} />
         </Route>
 
         {/* --- B. Student Only --- */}

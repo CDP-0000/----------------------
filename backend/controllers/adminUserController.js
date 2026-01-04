@@ -1,56 +1,101 @@
 // backend/controllers/adminUserController.js
 const { readData, writeData } = require('../utils/db');
 
-// API สร้าง User ภายใน (Staff, Manager, Director)
+// Helper: สุ่มรหัสผ่าน 8 หลัก
+const generatePassword = () => {
+    return Math.random().toString(36).slice(-8);
+};
+
+// 1. สร้าง User ใหม่ (Create)
 exports.createUser = (req, res) => {
+    // รับค่าทั้งหมดจาก Frontend
     const { 
-        targetRole, // role ที่ต้องการสร้าง (staff, branch_manager, director)
-        firstname, 
-        lastname, 
-        username, 
-        password,
-        branchId // ถ้าเป็น staff/manager ต้องระบุสาขา
+        targetRole, firstname, lastname, username, password, 
+        age, gender, 
+        educationLevel, studentType, // เฉพาะนักเรียน
+        branchId, villageId, schoolId // นักเรียน, พนักงาน, ผจก.
     } = req.body;
 
-    // 1. อ่านข้อมูล
     const users = readData();
 
-    // 2. Validate: ห้ามสร้าง role admin เพิ่ม (หรือแล้วแต่ Policy)
-    const allowedRoles = ['staff', 'branch_manager', 'director'];
-    if (!allowedRoles.includes(targetRole)) {
-        return res.status(400).json({ success: false, message: "Role นี้ไม่สามารถสร้างได้" });
-    }
-
-    // 3. เช็คซ้ำ
+    // Validate Duplicate Username
     if (users.find(u => u.loginId === username)) {
-        return res.status(400).json({ success: false, message: "Username นี้มีอยู่แล้ว" });
+        return res.status(400).json({ success: false, message: "ชื่อผู้ใช้งาน (Username) นี้มีอยู่แล้ว" });
     }
 
-    // 4. สร้าง User ใหม่
-    const newUser = {
-        id: Date.now().toString(),
+    // สร้าง ID และ Password (ถ้าไม่กรอก)
+    const newId = Date.now().toString();
+    const finalPassword = password ? password : generatePassword();
+
+    // สร้าง Object ตาม Role
+    let newUser = {
+        id: newId,
         loginId: username,
-        password: password,
-        role: targetRole, // ใช้ role ตามที่ Admin สั่ง
+        password: finalPassword,
+        role: targetRole,
         firstname,
         lastname,
-        branchId: branchId || null, // ถ้าเป็น Director อาจจะเป็น null
+        age: age || "-",
+        gender: gender || "-",
         createdAt: new Date().toISOString()
     };
+
+    // เพิ่มฟิลด์ตามเงื่อนไข
+    if (['student', 'staff', 'branch_manager'].includes(targetRole)) {
+        newUser.branchId = branchId || null;
+        newUser.villageId = villageId || null;
+        newUser.schoolId = schoolId || null;
+    }
+
+    if (targetRole === 'student') {
+        newUser.educationLevel = educationLevel || "-";
+        newUser.studentType = studentType || "NoCDP"; // Default NoCDP
+    }
 
     users.push(newUser);
     writeData(users);
 
-    res.json({ success: true, message: `สร้างผู้ใช้ตำแหน่ง ${targetRole} สำเร็จ` });
+    res.json({ success: true, message: "สร้างข้อมูลสำเร็จ", user: newUser });
 };
 
-// API ดึงรายชื่อ User ทั้งหมด (เพื่อแสดงในตารางหน้า Admin)
+// 2. ดึงข้อมูลทั้งหมด (Read) - แสดง Password ตามที่ขอ
 exports.getAllUsers = (req, res) => {
     const users = readData();
-    // กรอง password ออกก่อนส่งกลับเพื่อความปลอดภัย
-    const safeUsers = users.map(u => {
-        const { password, ...rest } = u;
-        return rest;
-    });
-    res.json(safeUsers);
+    // ส่งข้อมูลกลับไปทั้งหมดรวมถึง Password (ตาม requirement ของคุณ)
+    // *หมายเหตุ: ใน Production จริง ไม่ควรส่ง password กลับไป
+    res.json(users);
+};
+
+// 3. แก้ไขข้อมูล (Update)
+exports.updateUser = (req, res) => {
+    const { id } = req.params;
+    const updateData = req.body;
+    
+    let users = readData();
+    const index = users.findIndex(u => u.id === id);
+
+    if (index === -1) {
+        return res.status(404).json({ success: false, message: "ไม่พบผู้ใช้งาน" });
+    }
+
+    // อัปเดตข้อมูล (Merge ข้อมูลเก่ากับใหม่)
+    users[index] = { ...users[index], ...updateData };
+
+    writeData(users);
+    res.json({ success: true, message: "แก้ไขข้อมูลสำเร็จ", user: users[index] });
+};
+
+// 4. ลบข้อมูล (Delete)
+exports.deleteUser = (req, res) => {
+    const { id } = req.params;
+    let users = readData();
+    
+    const newUsers = users.filter(u => u.id !== id);
+    
+    if (users.length === newUsers.length) {
+        return res.status(404).json({ success: false, message: "ไม่พบผู้ใช้งาน" });
+    }
+
+    writeData(newUsers);
+    res.json({ success: true, message: "ลบผู้ใช้งานเรียบร้อยแล้ว" });
 };

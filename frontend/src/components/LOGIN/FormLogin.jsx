@@ -37,19 +37,19 @@ export default function FormLogin() {
         // 2.3 แยกทางเดินตาม Role (Redirect)
         switch (role) {
             case 'admin':
-                navigate("/home") // ไปหน้า Admin Dashboard
+                navigate("/home", { state: { role } }) // ไปหน้า Admin Dashboard
                 break
             case 'student':
-                navigate("/student") // ไปหน้า Home ของนักเรียน (หรือ /student)
+                navigate("/student", { state: { role } }) // ไปหน้า Home ของนักเรียน (หรือ /student)
                 break
             case 'staff':
-                navigate("/staff") // (ถ้ามีหน้านี้)
+                navigate("/staff", { state: { role } }) // (ถ้ามีหน้านี้)
                 break
             case 'branch_manager':
-                navigate("/manager") // (ถ้ามีหน้านี้)
+                navigate("/manager", { state: { role } }) // (ถ้ามีหน้านี้)
                 break
             case 'director':
-                navigate("/director") // (ถ้ามีหน้านี้)
+                navigate("/director", { state: { role } }) // (ถ้ามีหน้านี้)
                 break
             default:
                 navigate("/") // กรณีไม่รู้ว่าเป็นใคร ให้ไปหน้าแรก
