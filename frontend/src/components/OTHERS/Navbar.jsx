@@ -20,6 +20,7 @@ const ROLE_MENUS = {
     { label: "จัดการโรงเรียน", to: "/admin/schools" },
     { label: "จัดการสาขา", to: "/admin/branches" },
     { label: "จัดการหมู่บ้าน", to: "/admin/villages" },
+    { label: "จัดการวิชาเรียนเสริมทักษะ", to: "/admin/subjects" },
     { label: "จัดการคำร้อง", to: "/admin/requests" },
     { label: "สรุปจำนวนประจำวัน", to: "/admin/daily-summary" },
     { label: "สรุปหน้าที่ประจำวัน", to: "/admin/daily-career" },
@@ -32,8 +33,8 @@ const ROLE_MENUS = {
   ],
   staff: [
     { label: "หน้าหลัก", to: "/staff" },
-    { label: "สรุปจำนวนประจำวัน", to: "/staff/daily-summary" },
-    { label: "สรุปหน้าที่ประจำวัน", to: "/staff/daily-career" },
+    { label: "สรุปจำนวนประจำวัน", to: "/staff/teaching-summary" },
+    { label: "สรุปหน้าที่ประจำวัน", to: "/staff/daily-duty" },
     { label: "จัดการประวัติเด็ก", to: "/staff/child-history" },
     { label: "จัดรายชื่อเด็กประจำวิชา", to: "/staff/child-list" },
     { label: "คำร้อง", to: "/staff/requests" },

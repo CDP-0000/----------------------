@@ -36,7 +36,19 @@ export const MasterAPI = {
 export const AdminAPI = {
   getAllUsers: () => client.get('/admin/users'),
   createUser: (data) => client.post('/admin/create-user', data),
-  // ✅ เพิ่ม 2 ฟังก์ชันนี้
   updateUser: (id, data) => client.put(`/admin/update-user/${id}`, data),
   deleteUser: (id) => client.delete(`/admin/delete-user/${id}`),
+};
+
+export const SubjectAPI = {
+  getAll: () => client.get('/master/subjects'),
+  create: (data) => client.post('/master/subjects', data),
+  update: (id, data) => client.put(`/master/subjects/${id}`, data),
+  delete: (id) => client.delete(`/master/subjects/${id}`),
+};
+
+export const ReportAPI = {
+  createDailyDuty: (data) => client.post('/report/daily-duty', data),
+  
+  createTeachingSummary: (data) => client.post('/report/teaching-summary', data),
 };

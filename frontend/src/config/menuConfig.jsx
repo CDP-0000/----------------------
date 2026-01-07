@@ -68,8 +68,13 @@ export const ROLE_MENUS = {
     },
     { 
       title: "บันทึกงานประจำวัน", 
-      path: "/staff/daily", 
+      path: "/staff/daily-duty", 
       icon: <DocumentTextIcon className="w-5 h-5"/> 
+    },
+    { 
+      title: "สรุปยอดสอน", 
+      path: "/staff/teaching-summary", 
+      icon: <ChartBarIcon className="w-5 h-5"/> 
     },
   ],
 

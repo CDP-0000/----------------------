@@ -7,16 +7,23 @@ import TEST from './pages/TESTS/test'
 
 // Import Pages (Dashboards) - **ต้องสร้างไฟล์เหล่านี้ก่อนนะครับ**
 import AdminDashboard from './pages/ADMIN/Dashboard_admin';
-import StudentDashboard from './pages/STUDENT/Dashboard_student';
-import StaffDashboard from './pages/STAFF/Dashboard_staff';
-import ManagerDashboard from './pages/MANAGER/Dashboard_manager';
-import DirectorDashboard from './pages/DIRECTOR/Dashboard_director';
-
 import AdminSchools from './pages/ADMIN/master/AdminSchool'
 import AdminBranches from './pages/ADMIN/master/AdminBranches';
 import AdminVillages from './pages/ADMIN/master/AdminVillages';
-
+import AdminSubjects from './pages/ADMIN/master/AdminSubjectsPage';
 import AdminUsersPage from './pages/ADMIN/AdminUsersPage.jsx';
+
+import StudentDashboard from './pages/STUDENT/Dashboard_student';
+import StudentCoursesPage from './pages/STUDENT/StudentCoursesPage';
+
+import StaffDashboard from './pages/STAFF/Dashboard_staff';
+import DailyDuty from './pages/STAFF/DailyDuty';
+import TeachingSummary from './pages/STAFF/TeachingSummary';
+
+import ManagerDashboard from './pages/MANAGER/Dashboard_manager';
+
+import DirectorDashboard from './pages/DIRECTOR/Dashboard_director';
+
 
 // Import Guard & Layout
 import ProtectedRoute from './components/OTHERS/ProtectedRoute'
@@ -46,17 +53,21 @@ function App() {
           <Route path="/admin/schools" element={<AdminSchools />} />
           <Route path="/admin/branches" element={<AdminBranches />} />
           <Route path="/admin/villages" element={<AdminVillages />} />
+          <Route path="/admin/subjects" element={<AdminSubjects />} />
           <Route path="/admin/users" element={<AdminUsersPage />} />
         </Route>
 
         {/* --- B. Student Only --- */}
         <Route element={<ProtectedRoute allowedRoles={['student']} />}>
           <Route path="/student" element={<StudentDashboard />} />
+          <Route path="/student/courses" element={<StudentCoursesPage />} />
         </Route>
 
         {/* --- C. Staff Only --- */}
         <Route element={<ProtectedRoute allowedRoles={['staff']} />}>
           <Route path="/staff" element={<StaffDashboard />} />
+          <Route path="/staff/daily-duty" element={<DailyDuty />} />
+          <Route path="/staff/teaching-summary" element={<TeachingSummary />} />
         </Route>
 
         {/* --- D. Manager Only --- */}
