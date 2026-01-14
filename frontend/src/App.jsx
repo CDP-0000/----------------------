@@ -15,6 +15,7 @@ import AdminUsersPage from './pages/ADMIN/AdminUsersPage.jsx';
 
 import StudentDashboard from './pages/STUDENT/Dashboard_student';
 import StudentCoursesPage from './pages/STUDENT/StudentCoursesPage';
+import StudentRatePage from './pages/STUDENT/StudentRatePage.jsx';
 
 import StaffDashboard from './pages/STAFF/Dashboard_staff';
 import DailyDuty from './pages/STAFF/DailyDuty';
@@ -61,6 +62,7 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['student']} />}>
           <Route path="/student" element={<StudentDashboard />} />
           <Route path="/student/courses" element={<StudentCoursesPage />} />
+          <Route path="/student/rate-courses" element={<StudentRatePage />} />
         </Route>
 
         {/* --- C. Staff Only --- */}

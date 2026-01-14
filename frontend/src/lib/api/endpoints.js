@@ -49,6 +49,12 @@ export const SubjectAPI = {
 
 export const ReportAPI = {
   createDailyDuty: (data) => client.post('/report/daily-duty', data),
-  
+
   createTeachingSummary: (data) => client.post('/report/teaching-summary', data),
+};
+
+
+export const ReviewAPI = {
+  create: (data) => client.post('/reviews/create', data),
+  getBySubject: (subjectId) => client.get(`/reviews/subject/${subjectId}`),
 };

@@ -6,6 +6,8 @@ const adminRoutes = require('./routes/adminRoutes'); // ✅ เพิ่ม
 const masterRoutes = require('./routes/masterRoutes'); // ✅ เพิ่ม
 const subjectRoutes = require('./routes/subjectRoutes'); // ✅ เพิ่ม route สำหรับ subjects
 const reportRoutes = require('./routes/reportRoutes'); // ✅ เพิ่ม
+const reviewRoutes = require('./routes/reviewRoutes'); // <--- เพิ่มบรรทัดนี้
+
 const app = express();
 const PORT = 3000;
 
@@ -19,6 +21,7 @@ app.use('/api/admin', adminRoutes); // ✅ URL จะเป็น /api/admin/cre
 app.use('/api/master', masterRoutes); // ✅ URL จะเป็น /api/master/schools
 app.use('/api/master/subjects', subjectRoutes); // ✅ เพิ่ม route สำหรับ subjects
 app.use('/api/report', reportRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 app.get('/', (req, res) => {
     res.send('Backend Server is Ready!');

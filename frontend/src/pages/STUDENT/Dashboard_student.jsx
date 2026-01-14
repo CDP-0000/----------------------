@@ -197,7 +197,22 @@ export default function StudentDashboard() {
           <h4 className="font-bold text-slate-800">ข้อมูลของฉัน</h4>
           <p className="text-xs text-slate-500">แก้ไขประวัติส่วนตัว</p>
         </button>
+
+        <button
+          type="button"
+          onClick={() => navigate("/student/rate-courses")}
+          className="text-left bg-white p-6 rounded-2xl border border-slate-100 hover:shadow-md cursor-pointer transition-all group"
+        >
+          <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-2 font-bold group-hover:scale-110 transition-transform">
+            ✨
+          </div>
+          <h4 className="font-bold text-slate-800">ให้คะแนนวิชา</h4>
+          <p className="text-xs text-slate-500">ให้คะแนนและรีวิวรายวิชา</p>
+        </button>
       </div>
+
+      
+      
 
       {/* 5) Small footer note */}
       <div className="text-xs text-slate-500">

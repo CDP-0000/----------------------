@@ -1,58 +1,116 @@
 // backend/controllers/authController.js
 const { readData, writeData } = require('../utils/db');
 
-// --- 1. Register (สำหรับนักเรียนเท่านั้น!) ---
-exports.register = (req, res) => {
-    const formData = req.body;
-    const users = readData();
-
-    // เช็คว่า Username ซ้ำไหม
-    if (users.find(u => u.loginId === formData.username)) {
-        return res.status(400).json({ success: false, message: "Username นี้ถูกใช้ไปแล้ว" });
+// Helper: สร้างรหัสผ่านจากวันเกิด (format: YYYY-MM-DD -> DDMMYYYY)
+const generatePasswordFromBirthdate = (birthdate) => {
+    if (!birthdate) return '1234'; // Default fallback
+    const parts = birthdate.split('-'); // [YYYY, MM, DD]
+    if (parts.length === 3) {
+        return `${parts[2]}${parts[1]}${parts[0]}`;
     }
-
-    // Logic สร้าง ID นักเรียน (Student ID)
-    const loginId = `STU${Math.floor(100000 + Math.random() * 900000)}`;
-    const password = formData.password || '1234'; 
-
-    // *** จุดสำคัญ: ตรวจสอบข้อมูลเด็กโครงการ ***
-    // สมมติ: ถ้ากรอก "รหัสบัตรประชาชน" ตรงกับฐานข้อมูล "ประวัติเด็ก (StudentHistory)" ให้ถือว่าเป็นเด็กโครงการ
-    // (ใน Mockup เราอาจจะรับค่า isProjectStudent มาจาก Frontend หรือเช็คแบบง่ายๆ ไปก่อน)
-    
-    const newUser = {
-        id: Date.now().toString(),
-        loginId: loginId, 
-        password: password, 
-        
-        // 🚨 SECURITY: บังคับเป็น student เท่านั้น ห้ามรับค่า role จาก Frontend
-        role: 'student', 
-        
-        firstname: formData.firstname,
-        lastname: formData.lastname,
-        studentType: formData.isProjectMember ? 'project' : 'general', // แยกประเภท
-        createdAt: new Date().toISOString()
-    };
-
-    users.push(newUser);
-    writeData(users);
-
-    res.json({ success: true, message: "ลงทะเบียนนักเรียนสำเร็จ", credentials: { loginId, password } });
+    return '1234';
 };
 
-// --- 2. Login (รองรับทุก Role) ---
+// --- 1. Register (สำหรับนักเรียน) ---
+exports.register = (req, res) => {
+    try {
+        const formData = req.body;
+        const users = readData('users.json');
+
+        // (Optional) เช็คว่าเคยมีชื่อ-นามสกุลนี้ในระบบหรือยัง? (ป้องกันการกดรัว)
+        const existingUser = users.find(u => 
+            u.firstname === formData.firstname && 
+            u.lastname === formData.lastname
+        );
+        
+        if (existingUser) {
+            // ถ้าต้องการให้แจ้งเตือนว่ามีชื่อนี้แล้ว ให้เปิดบรรทัดนี้:
+            // return res.status(400).json({ success: false, message: "ชื่อและนามสกุลนี้มีในระบบแล้ว" });
+        }
+
+        // 1. สร้าง Student ID (สุ่มเลข 6 หลัก)
+        // ตรวจสอบไม่ให้ซ้ำกับ ID ที่มีอยู่
+        let loginId;
+        let isDuplicate = true;
+        while (isDuplicate) {
+            loginId = `STU${Math.floor(100000 + Math.random() * 900000)}`;
+            if (!users.find(u => u.loginId === loginId)) {
+                isDuplicate = false;
+            }
+        }
+
+        // 2. สร้าง Password จากวันเกิด (DDMMYYYY)
+        const password = generatePasswordFromBirthdate(formData.birthdate);
+
+        // 3. เตรียม Object ข้อมูลที่จะบันทึก (Map ตาม Frontend เป๊ะๆ)
+        const newUser = {
+            id: Date.now().toString(),
+            loginId: loginId,
+            password: password, // ใน Production ควร Hash ด้วย bcrypt
+            
+            role: 'student', // บังคับเป็น student
+            studentType: formData.studentType || 'general', // รับค่า NoCDP หรืออื่นๆ
+            
+            // ข้อมูลส่วนตัว
+            firstname: formData.firstname,
+            lastname: formData.lastname,
+            nickname: formData.nickname,
+            birthdate: formData.birthdate,
+            gender: formData.gender,
+            contact: formData.contact || '',
+            
+            // ข้อมูลการศึกษา/พื้นที่
+            educationLevel: formData.educationLevel,
+            branchId: formData.branchId,
+            villageId: formData.villageId,
+            schoolId: formData.schoolId,
+
+            // ข้อมูล Profile เบื้องต้น (Interests, Goals, Health)
+            initialProfile: formData.initialProfile || {},
+
+            createdAt: new Date().toISOString(),
+            isActive: true
+        };
+
+        // 4. บันทึกลงไฟล์
+        users.push(newUser);
+        writeData('users.json', users);
+
+        // 5. ส่ง Response กลับไปให้ Frontend แสดงผล
+        // Frontend คาดหวัง credentials: { loginId, password }
+        res.status(201).json({ 
+            success: true, 
+            message: "ลงทะเบียนนักเรียนสำเร็จ", 
+            credentials: { 
+                loginId: loginId, 
+                password: password 
+            },
+            user: {
+                firstname: newUser.firstname,
+                lastname: newUser.lastname,
+                role: newUser.role
+            }
+        });
+
+    } catch (error) {
+        console.error("Register Error:", error);
+        res.status(500).json({ success: false, message: "Server Error: ไม่สามารถลงทะเบียนได้" });
+    }
+};
+
+// --- 2. Login (เหมือนเดิม) ---
 exports.login = (req, res) => {
     const { username, password } = req.body;
-    const users = readData();
+    const users = readData('users.json');
 
     const user = users.find(u => u.loginId === username && u.password === password);
 
     if (user) {
-        // ส่งข้อมูลกลับไป แต่ไม่ต้องส่ง password กลับ
         const { password, ...userData } = user; 
         res.json({ 
             success: true, 
             message: "Login Success", 
-            role: user.role, // Frontend จะเอาค่านี้ไป Redirect หน้า
+            role: user.role, 
             user: userData 
         });
     } else {
