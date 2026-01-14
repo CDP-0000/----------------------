@@ -54,25 +54,5 @@
     "branchId": null,
     "position": "Executive Director",
     "createdAt": "2024-01-05T00:00:00.000Z"
-  },
-  {
-    "id": "1768125122199",
-    "loginId": "STU798568",
-    "password": "1234",
-    "role": "student",
-    "firstname": "ศักรินทร์",
-    "lastname": "หาญชนะพล",
-    "studentType": "general",
-    "createdAt": "2026-01-11T09:52:02.199Z"
-  },
-  {
-    "id": "1768388403486",
-    "loginId": "STU193073",
-    "password": "1234",
-    "role": "student",
-    "firstname": "ศักรินทร์",
-    "lastname": "หาญชนะพล",
-    "studentType": "general",
-    "createdAt": "2026-01-14T11:00:03.486Z"
   }
 ]
