@@ -11,8 +11,8 @@ export default function Footer() {
                 <div className="mb-6 space-y-2">
                     <h2 className="text-lg font-bold text-white mb-3">ติดต่อเรา</h2>
                     <p className="text-sm md:text-base leading-relaxed">
-                        123 หมู่ 4 ถนนสุขสวัสดิ์ แขวงบางปะกอก <br className="hidden md:block"/> 
-                        เขตราษฎร์บูรณะ กรุงเทพฯ 10140
+                        91/47 หมู่ 3 หมู่บ้านบัวทอง ตำบลขามใหญ่ <br className="hidden md:block"/> 
+                        อำเภอเมืองอุบลราชธานี จังหวัดอุบลราชธานี 34000
                     </p>
                     <div className="flex justify-center gap-4 text-sm font-medium text-emerald-400 pt-1">
                         <a href="tel:021234567" className="hover:text-emerald-300 transition">โทร: 02-123-4567</a>
